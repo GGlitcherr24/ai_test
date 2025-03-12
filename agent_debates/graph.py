@@ -8,7 +8,6 @@ from langchain_core.messages import HumanMessage
 from langchain_gigachat import GigaChat
 from langgraph.graph import END, START, MessagesState, StateGraph
 
-from get_access_token2 import get_access_token
 
 load_dotenv(find_dotenv())
 
@@ -82,7 +81,6 @@ def decide_to_stop(state: DebatesState) -> bool:
     return state.get("discuss_count", 0) > state.get("max_count", 10)
 
 giga = GigaChat(
-    access_token=get_access_token(),
     model="GigaChat-Max",
     profanity_check=False,
     timeout=600,

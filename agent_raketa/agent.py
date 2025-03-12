@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Literal
 from langchain.tools import tool
 import os
 from dotenv import find_dotenv, load_dotenv
@@ -6,15 +6,12 @@ from langchain_gigachat.chat_models import GigaChat
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
 import time
-import asyncio
-import aiohttp
 
 from menu import menu
-from get_access_token3 import get_access_token
-import logging
-import httpx
 
 load_dotenv(find_dotenv())
+
+METHOD_OF_RECEIPT = Literal["Доставка", "Самовывоз"]
 
 @tool
 def get_all_doner_names() -> str:
@@ -34,12 +31,23 @@ def get_modifiers_by_name(name: str) -> Dict:
 
     return {"error": "Позиции с таким названием не существует"}
 
-system_prompt = "Ты бот-продавец шаурмы. Твоя задача продать шаурму, напитки, шашлык клиенту, получив от него заказ. Если тебе не хватает каких-то данных, запрашивай их у пользователя."
+@tool
+def create_order(name: str,
+                 address: str,
+                 phone_number: str,
+                 place: METHOD_OF_RECEIPT):
+    """ Создает заказ """
+    print(f"Bot requested function create_order({name}, {place}, {address}, {phone_number})")
+    print(f"NEW ORDER!: {name}, {place}, {address}, {phone_number}")
+    return
 
-tools = [get_all_doner_names, get_modifiers_by_name]
+
+system_prompt = "Ты бот-продавец шаурмы. Твоя задача продать шаурму, напитки, шашлык клиенту, если клиент сказал какая позиция нужна клиенту, предоставь список всех модификторов этого товара, если у этого блюда они есть(обратись к методу получения модификаторов), потом создать заказ, предварительно узнав всю необходимую информацию от клиента. Если тебе не хватает каких-то данных, запрашивай их у пользователя."
+
+tools = [get_all_doner_names, get_modifiers_by_name, create_order]
 
 model = GigaChat(
-    model="GigaChat-Pro",
+    model="GigaChat-Max",
     verify_ssl_certs=False,
     timeout=600,
 )
