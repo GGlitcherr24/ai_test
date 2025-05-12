@@ -14,7 +14,7 @@ def get_access_token():
       'Content-Type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
       'RqUID': 'dc540414-f6e6-4971-8d20-c1a136e90bc9',
-      'Authorization': 'Basic ZjAxOWFjNDMtMzIzNi00ZmNhLTliNDAtMGVkYjQ4ZWFlYzQxOjAyMWUyMmUzLWNmNzUtNDVmMy1iNjBiLTJlN2VjYmJkMDA1Mg=='
+      'Authorization': 'Basic ...'
     }
 
     response = requests.request("POST", url, headers=headers, data=payload, verify=False)
